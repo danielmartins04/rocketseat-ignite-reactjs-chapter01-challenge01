@@ -1,8 +1,8 @@
-import { useState } from 'react'
+import { useState } from 'react';
 
-import '../styles/tasklist.scss'
+import '../styles/tasklist.scss';
 
-import { FiTrash, FiCheckSquare } from 'react-icons/fi'
+import { FiTrash, FiCheckSquare } from 'react-icons/fi';
 
 interface Task {
   id: number;
@@ -15,15 +15,50 @@ export function TaskList() {
   const [newTaskTitle, setNewTaskTitle] = useState('');
 
   function handleCreateNewTask() {
-    // Crie uma nova task com um id random, não permita criar caso o título seja vazio.
+    if (newTaskTitle !== '') {
+      const newTask = {
+        id: Math.floor(Math.random() * 65536),
+        title: newTaskTitle,
+        isComplete: false
+      }
+      
+      setTasks([...tasks, newTask]);
+    }
   }
 
   function handleToggleTaskCompletion(id: number) {
     // Altere entre `true` ou `false` o campo `isComplete` de uma task com dado ID
+    for (var i = 0; i < tasks.length; i++) {
+      if (tasks[i].id === id) {
+        tasks[i].isComplete = !tasks[i].isComplete;
+        break;
+      }
+    }
+
+    setTasks([...tasks]);
   }
 
   function handleRemoveTask(id: number) {
     // Remova uma task da listagem pelo ID
+    let idPosition = -1;
+    let tasksFiltered: Task[] = [];
+
+    for (var i = 0; i < tasks.length; i++) {
+      if (tasks[i].id === id) {
+        idPosition = i;
+        break;
+      }
+    }
+
+    if (idPosition !== -1) {
+      tasks.splice(idPosition, 1);
+      setTasks([...tasks]);
+      // console.log('Entrou')
+    }
+
+    // console.log(idPosition);
+    // console.log(tasksFiltered);
+    // console.log(tasks);
   }
 
   return (
